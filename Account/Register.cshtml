@@ -1,0 +1,207 @@
+﻿@* Remove this section if you are using bundling *@
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/login.js"></script>
+<script type="text/javascript">     
+function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ( (charCode > 31 && charCode < 48) || charCode > 57) {
+            return false;
+        }
+        return true;
+    }
+</script>
+}
+
+@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Register";
+
+    // Initialize general page variables
+    var email = "";
+    var fname = "";
+    var lname = "";
+    var SIN = "";
+    var password = "";
+    var confirmPassword = "";
+
+    // Setup validation
+    Validation.RequireField("email", "You must specify an email address.");
+    Validation.RequireField("SIN", "Your SIN number does not match with our database.");
+    Validation.Add("SIN",
+        Validator.StringLength(
+            maxLength: 9,
+            minLength: 9,
+            errorMessage: "SIN must be at 9 numbers!"));
+    Validation.RequireField("password", "Password cannot be blank.");
+    Validation.Add("confirmPassword",
+        Validator.EqualsTo("password", "Password and confirmation password do not match."));
+    Validation.Add("password",
+        Validator.StringLength(
+            maxLength: Int32.MaxValue,
+            minLength: 6,
+            errorMessage: "Password must be at least 6 characters"));
+
+    // If this is a POST request, validate and process data
+    if (IsPost) {
+        AntiForgery.Validate();
+        fname = Request.Form["fname"];
+        lname = Request.Form["lname"];
+        email = Request.Form["email"];
+        SIN = Request.Form["SIN"];
+        password = Request.Form["password"];
+        confirmPassword = Request.Form["confirmPassword"];
+
+        // Validate the user's captcha answer
+        // if (!ReCaptcha.Validate("PRIVATE_KEY")) {
+        //     ModelState.AddError("recaptcha", "Captcha response was not correct");
+        // }
+
+        // If all information is valid, create a new account
+        if (Validation.IsValid()) {
+            // Insert a new user into the database
+            var db = Database.Open("StarterSite");
+            var mydb = Database.Open("myConnectionString");
+            var check = 1;
+
+            // Check if user already exists
+            var user = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            var FirstName = mydb.QuerySingle("SELECT fName FROM personal WHERE SIN = @0", SIN);
+            
+            if (user == null) {
+                // Insert email into the profile table
+                var cSIN = mydb.QuerySingle("SELECT SIN FROM personal WHERE SIN = @0", SIN);
+                if (cSIN == null) {
+                    ModelState.AddFormError("The SIN number entered in not correct!!");
+                    check = 1;
+                    }
+                    else{
+                if (cSIN.SIN != SIN) {
+                    ModelState.AddFormError("The SIN number entered in not correct!!");
+                    check = 1;
+                    }
+                    else{
+                        if (FirstName == null) {
+                    ModelState.AddFormError("Wrong First Name!!");
+                    check = 1;
+                    }
+                    else{
+                        if (FirstName.fName != fname) {
+                            ModelState.AddFormError("Wrong First Name!!");
+                            check = 1;
+                        }
+                        else{
+                            var LastName = mydb.Query("SELECT lName FROM personal WHERE SIN = @0", SIN);
+                        var lasName = LastName.ElementAt(0);
+                        if (lasName.lName != lname) {
+                            ModelState.AddFormError("Wrong Last Name!!");
+                            check = 1;
+                        }
+                        else{
+                            check = 0;
+                            }
+                        }
+                        }
+                }
+                }
+                    if(check == 0)
+                    {
+                db.Execute("INSERT INTO UserProfile (Email,fname,lname) VALUES (@0,@1,@2)", email,fname,lname);
+                
+                var updateUID = mydb.QuerySingle("SELECT PID FROM personal WHERE SIN = @0", SIN);
+                db.Execute("UPDATE UserProfile SET PID =@0 WHERE LOWER(Email) = LOWER(@1)", updateUID.PID,email);
+                
+                // Create and associate a new entry in the membership database.
+                // If successful, continue processing the request
+                try {
+                    bool requireEmailConfirmation = !WebMail.SmtpServer.IsEmpty();
+                    var token = WebSecurity.CreateAccount(email, password, requireEmailConfirmation);
+                    if (requireEmailConfirmation) {
+                        var hostUrl = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
+                        var confirmationUrl = hostUrl + VirtualPathUtility.ToAbsolute("~/Account/Confirm?confirmationCode=" + HttpUtility.UrlEncode(token));
+
+                        WebMail.Send(
+                            to: email,
+                            subject: "Please confirm your account",
+                            body: "Your confirmation code is: " + token + ". Visit <a href=\"" + confirmationUrl + "\">" + confirmationUrl + "</a> to activate your account."
+                        );
+                    }
+
+                    if (requireEmailConfirmation) {
+                        // Thank the user for registering and let them know an email is on its way
+                        Response.Redirect("~/Account/Thanks");
+                    } else {
+                        // Navigate back to the homepage and exit
+                        WebSecurity.Login(email, password);
+
+                        Response.Redirect("~/");
+                    }
+                } catch (System.Web.Security.MembershipCreateUserException e) {
+                    ModelState.AddFormError(e.Message);
+                }
+                }
+            } else {
+                // User already exists
+                ModelState.AddFormError("Email address is already in use.");
+            }
+            
+        }
+    }
+}
+
+<hgroup class="title" style="background-color: #444">
+
+    <h2>Create a new account.</h2>
+</hgroup>
+<section id="msform" style="background-color: #444">
+<form method="post" id="form">
+    @AntiForgery.GetHtml()
+    @* If at least one validation error exists, notify the user *@
+    @Html.ValidationSummary("Account creation was unsuccessful. Please correct the errors and try again.", excludeFieldErrors: true, htmlAttributes: null)
+
+    <fieldset>
+        <legend>Registration Form</legend>
+        <ol>
+            <li class="fname">
+                <label for="fname" @if(!ModelState.IsValidField("fname")){<text>class="error-label"</text>}>First Name</label>
+                <input type="text" id="fname" name="fname" value="@fname" @Validation.For("fname") />
+                @* Write any email validation errors to the page *@
+                @Html.ValidationMessage("fname")
+            </li>
+            <li class="lname">
+                <label for="lname" @if(!ModelState.IsValidField("lname")){<text>class="error-label"</text>}>Last Name</label>
+                <input type="text" id="lname" name="lname" value="@lname" @Validation.For("email") />
+                @* Write any email validation errors to the page *@
+                @Html.ValidationMessage("lname")
+            </li>
+            <li class="email">
+                <label for="email" @if(!ModelState.IsValidField("email")){<text>class="error-label"</text>}>Email address</label>
+                <input type="text" id="email" name="email" value="@email" @Validation.For("email") />
+                @* Write any email validation errors to the page *@
+                @Html.ValidationMessage("email")
+            </li>
+            <li class="SIN">
+                <label for="SIN" @if(!ModelState.IsValidField("SIN")){<text>class="error-label"</text>}>Social Insurance Number</label>
+                <input type="text" id="SIN" name="SIN" value="@SIN" @Validation.For("SIN") onkeypress="return isNumber(event)" />
+                @* Write any email validation errors to the page *@
+                @Html.ValidationMessage("SIN")
+            </li>
+            <li class="password">
+                <label for="password" @if(!ModelState.IsValidField("password")) {<text>class="error-label"</text>}>Password</label>
+                <input type="password" id="password" name="password" @Validation.For("password") />
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("password")
+            </li>
+            <li class="confirm-password">
+                <label for="confirmPassword" @if(!ModelState.IsValidField("confirmPassword")) {<text>class="error-label"</text>}>Confirm password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" @Validation.For("confirmPassword") />
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("confirmPassword")
+            </li>
+        </ol>
+        <input id="submit" type="submit" value="Register"/>
+    </fieldset>
+</form>
+</section>
