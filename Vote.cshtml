@@ -1,0 +1,229 @@
+﻿@section Scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">     
+function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ( (charCode > 31 && charCode < 48) || charCode > 57) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+}
+
+@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "About";
+
+    var vote = "";
+    var email = "";
+    var check = "0";
+
+    var myDB2 = Database.Open("myConnectionString");
+    var NameAll = myDB2.Query("SELECT * FROM party");
+    var Name1 = NameAll.ElementAt(0);
+    var Name2 = NameAll.ElementAt(1);
+    var Name3 = NameAll.ElementAt(2);
+    var Name4 = NameAll.ElementAt(3);
+    var Name5 = NameAll.ElementAt(4);
+    var Name6 = NameAll.ElementAt(5);
+    var Name7 = NameAll.ElementAt(6);
+    var Name8 = NameAll.ElementAt(7);
+    var Name9 = NameAll.ElementAt(8);
+    var Name10 = NameAll.ElementAt(9);
+    var Name11 = NameAll.ElementAt(10);
+    var Name12 = NameAll.ElementAt(11);
+    var Name13 = NameAll.ElementAt(12);
+
+
+    // If this is a POST request, validate and process data
+    if (IsPost) {
+        vote = Request.Form["vote"];
+        email = WebSecurity.CurrentUserName;
+        var db = Database.Open("StarterSite");
+        var myDB = Database.Open("myConnectionString");
+        if (@WebSecurity.IsAuthenticated){
+            var q1 = db.QuerySingle("SELECT PID FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            var voted = myDB.QuerySingle("SELECT voted FROM votes WHERE VID = @0", q1.PID);
+            if (voted.voted == 1)
+            {
+                ModelState.AddFormError("You cannot vote more than once!!");
+            }
+            else{
+                if (Convert.ToInt16(vote) < 1 || Convert.ToInt16(vote) > 13)
+                {
+                    ModelState.AddFormError("You can only vote for a candidate from the list above!!");
+                }
+                else
+                {
+
+                    myDB.Execute("UPDATE votes SET vote = @0 WHERE VID = @1", vote, q1.PID);
+                    myDB.Execute("UPDATE votes SET voted = 1 WHERE VID = @0", q1.PID);
+                }
+                }
+        }
+        else{
+            ModelState.AddFormError("You need to be logged in to vote!!");
+        }
+    }
+    
+}
+<div class="content-3">
+<h2>How the Voting Works</h2>
+</div>
+ <div class="row">
+                <div class="col-sm-12">
+                	<h2 class="section-header">Modernized Election</h2>
+             <div class="container">   	
+    <ul style="list-style-type:disc" align="left">
+  <li>First register your account through our registration page</li>
+  <li>Once registered, activate your account with the email verification code</li>
+  <li>Head on over to our candidate's page to see whom you want to vote for</li>
+        <li>Once you've made your choice, type the candidate's number in the field below and click vote.</li>
+        <li>Once the election is complete, check out our results page to see the winner of the election.</li>
+</ul>
+            </div>
+        </div>
+     </div>
+<div class="container"></div>
+
+<br>
+<div class="content-3">
+<table id="datatable" style="margin-left: auto; margin-right: auto; ">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Candidates:</th>
+            </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>
+            @Name1.Pname
+            </text></th>
+            <td>
+            @Name1.parID
+            </td>
+        </tr>
+        <tr>
+            <th>@Name2.Pname</th>
+            <td>
+            @Name2.parID
+            </td>
+        </tr>
+        <tr>
+            <th>@Name3.Pname</th>
+            <td>
+          @Name3.parID
+            </td>
+        </tr>
+        <tr>
+            <th>@Name4.Pname</th>
+            <td>
+            @Name4.parID
+            </td>
+        </tr>
+        <tr>
+            <th>@Name5.Pname</th>
+            <td>
+            @Name5.parID
+            </td>
+        </tr>
+    <tr>
+            <th>@Name6.Pname</th>
+            <td>
+           @Name6.parID
+            </td>
+        </tr>
+    <tr>
+            <th>@Name7.Pname</th>
+            <td>
+            @Name7.parID
+            </td>
+        </tr>
+    <tr>
+            <th>@Name8.Pname</th>
+            <td>
+           @Name8.parID
+            </td>
+        </tr>
+    <tr>
+            <th>@Name9.Pname</th>
+            <td>
+            @Name9.parID
+            </td>
+        </tr>
+    <tr>
+            <th>@Name10.Pname</th>
+            <td>
+           @Name10.parID
+            </td>
+        </tr>
+    <tr>
+            <th>@Name11.Pname</th>
+            <td>
+            @Name11.parID
+           </td>
+        </tr>
+    <tr>
+            <th>@Name12.Pname</th>
+            <td>
+            @Name12.parID
+            </td>
+        </tr>
+    <tr>
+            <th>@Name13.Pname</th>
+            <td>
+           @Name13.parID
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<br>
+
+<form method="post" id="form">
+    <br>
+    <br>
+    <br>
+     @AntiForgery.GetHtml()
+    @* If at least one validation error exists, notify the user *@
+    @Html.ValidationSummary("", excludeFieldErrors: true, htmlAttributes: null)
+
+    <fieldset>
+        <legend>Voting Form</legend>
+        <ol>
+            <li class="vote">
+                 <label for="vote" @if(!ModelState.IsValidField("vote")){<text>class="error-label"</text>}>Vote</label>
+                <input type="text" class="textfield" value="@vote" @Validation.For("vote") id="vote" name="vote" onkeypress="return isNumber(event)" />
+                @Html.ValidationMessage("vote")
+                </li>
+            </ol>
+        <input class="btn btn-default btn-lg" id="submit" type="submit" value="Vote"/>
+        </fieldset>
+    </form>
+</div>
+<!-- Footer -->
+    <footer class="page-footer">
+    
+    	<!-- Contact Us -->
+        <div class="contact">
+        	<div class="container">
+				<h2 class="section-heading">Contact Us</h2>
+				<p><span class="glyphicon glyphicon-earphone"></span><br> +1(23) 456 7890</p>
+				<p><span class="glyphicon glyphicon-envelope"></span><br> info@example.com</p>
+        	</div>
+        </div>
+        	
+        <!-- Copyright etc -->
+        <div class="small-print">
+        	<div class="container">
+        		<p>Copyright &copy; Example.com </p>
+        	</div>
+        </div>
+        
+    </footer>
+

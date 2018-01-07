@@ -1,0 +1,195 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Candidtes";
+
+    var myDB = Database.Open("myConnectionString");
+
+    var NameAll = myDB.Query("SELECT * FROM party JOIN candidates ON party.parID = candidates.CID");
+    var Name1 = NameAll.ElementAt(0);
+    var Name2 = NameAll.ElementAt(1);
+    var Name3 = NameAll.ElementAt(2);
+    var Name4 = NameAll.ElementAt(3);
+    var Name5 = NameAll.ElementAt(4);
+    var Name6 = NameAll.ElementAt(5);
+    var Name7 = NameAll.ElementAt(6);
+    var Name8 = NameAll.ElementAt(7);
+    var Name9 = NameAll.ElementAt(8);
+    var Name10 = NameAll.ElementAt(9);
+    var Name11 = NameAll.ElementAt(10);
+    var Name12 = NameAll.ElementAt(11);
+    var Name13 = NameAll.ElementAt(12);
+}
+
+<hgroup class="content-3">
+    <h2>The Current Candidates</h2>
+</hgroup>
+<section class="content">
+        <div class="container">
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name1.Pname</h3>
+    <p>
+        <h4>Candidate: @Name1.CfName @Name1.ClName</h4>
+        <img class="img" src="images/jtrud.jpg" alt="" height="250" width="200" >
+        <br>
+        <span>The information here is about the liberal party and its candidate</span>
+    </p>
+                </div>
+                </div>
+            <div class="content-3">
+                <div class="body3">
+        <h3>@Name2.Pname</h3>
+    <p>
+        <h4>Candidate: @Name2.CfName @Name2.ClName</h4>
+        <img class="img" src="images/p7.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Conservative party and its candidate</span>
+    </p>
+                </div>
+                </div>
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name3.Pname</h3>
+    <p>
+        <h4>Candidate: @Name3.CfName @Name3.ClName</h4>
+        <img class="img" src="images/jbatt.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Green party and its candidate</span>
+    </p>
+                </div>
+                </div>
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name4.Pname</h3>
+    <p>
+        <h4>Candidate: @Name4.CfName @Name4.ClName</h4>
+        <img class="img" src="images/p3.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Bloc Quebecois party and its candidate</span>
+    </p>
+                </div>
+                </div>
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name5.Pname</h3>
+    <p>
+        <h4>Candidate: @Name5.CfName @Name5.ClName</h4>
+        <img class="img" src="images/p2.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Canadian Action party and its candidate</span>
+    </p>
+                </div>  
+                </div>
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name6.Pname</h3>
+    <p>
+        <h4>Candidate: @Name6.CfName @Name6.ClName</h4>
+        <img class="img" src="images/jdab.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Christian Heritage party and its candidate</span>
+    </p>
+                </div> 
+                </div>
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name7.Pname</h3>
+    <p>
+        <h4>Candidate: @Name7.CfName @Name7.ClName</h4>
+        <img class="img" src="images/bdich.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Communist party and its candidate</span>
+    </p>
+                </div>   
+                </div>
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name8.Pname</h3>
+    <p>
+        <h4>Candidate: @Name8.CfName @Name8.ClName</h4>
+        <img class="img" src="images/billm.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Libertarian party and its candidate</span>
+    </p>
+                </div>
+                </div>
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name9.Pname</h3>
+    <p>
+        <h4>Candidate: @Name9.CfName @Name9.ClName</h4>
+        <img class="img" src="images/emay.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Marijuana party and its candidate</span>
+    </p>
+                </div>   
+                </div>
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name10.Pname</h3>
+    <p>
+        <h4>Candidate: @Name10.CfName @Name10.ClName</h4>
+        <img class="img" src="images/p4.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Marxist-Leninst party and its candidate</span>
+    </p>
+                </div>  
+                </div>
+            <div class="content-3"> 
+                <div class="body2">
+        <h3>@Name11.Pname</h3>
+    <p>
+        <h4>Candidate: @Name11.CfName @Name11.ClName</h4>
+        <img class="img" src="images/p1.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the New Democratic party and its candidate</span>
+    </p>
+                </div>    
+                </div>
+            <div class="content-3">
+                <div class="body2">
+        <h3>@Name12.Pname</h3>
+    <p>
+        <h4>Candidate: @Name12.CfName @Name12.ClName</h4>
+        <img class="img" src="images/p6.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Progressive party and its candidate</span>
+    </p>
+                </div>     
+                </div>
+            <div class="content-3">   
+                <div class="body2">
+        <h3>@Name13.Pname</h3>
+    <p>
+        
+        <h4>Candidate: @Name13.CfName @Name13.ClName</h4>
+        <img class="img" src="images/pm1.jpg" alt=""height="250" width="200">
+        <br>
+        <span>The information here is about the Western Canada Concept party and its candidate</span>
+    </p>
+                </div> 
+                </div>
+                
+            </div>
+        </div>
+    </section>
+<!-- Footer -->
+    <footer class="page-footer">
+    
+    	<!-- Contact Us -->
+        <div class="contact">
+        	<div class="container">
+				<h2 class="section-heading">Contact Us</h2>
+				<p><span class="glyphicon glyphicon-earphone"></span><br> +1(23) 456 7890</p>
+				<p><span class="glyphicon glyphicon-envelope"></span><br> info@example.com</p>
+        	</div>
+        </div>
+        	
+        <!-- Copyright etc -->
+        <div class="small-print">
+        	<div class="container">
+        		<p>Copyright &copy; Example.com </p>
+        	</div>
+        </div>
+        
+    </footer>

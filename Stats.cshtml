@@ -1,0 +1,608 @@
+﻿@section Scripts {
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="~/Scripts/voteChart.js"></script>
+<script src="~/Scripts/genderChart.js"></script>
+<script src="~/Scripts/regionChart.js"></script>
+<script src="~/Scripts/ageChart.js"></script>
+}
+
+@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Candidtes";
+
+
+    var myDB = Database.Open("myConnectionString");
+    // Name Variables
+    var NameAll = myDB.Query("SELECT Pname FROM party");
+    var Name1 = NameAll.ElementAt(0);
+    var Name2 = NameAll.ElementAt(1);
+    var Name3 = NameAll.ElementAt(2);
+    var Name4 = NameAll.ElementAt(3);
+    var Name5 = NameAll.ElementAt(4);
+    var Name6 = NameAll.ElementAt(5);
+    var Name7 = NameAll.ElementAt(6);
+    var Name8 = NameAll.ElementAt(7);
+    var Name9 = NameAll.ElementAt(8);
+    var Name10 = NameAll.ElementAt(9);
+    var Name11 = NameAll.ElementAt(10);
+    var Name12 = NameAll.ElementAt(11);
+    var Name13 = NameAll.ElementAt(12);
+    //Vote Chart Variables
+    var resultsAll = myDB.Query("SELECT COUNT(*) AS Num_All FROM votes WHERE vote = 0");
+    var notVoted = resultsAll.ElementAt(0);
+    var results1 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 1");
+    var Voted1 = results1.ElementAt(0);
+    var results2 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 2");
+    var Voted2 = results2.ElementAt(0);
+    var results3 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 3");
+    var Voted3 = results3.ElementAt(0);
+    var results4 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 4");
+    var Voted4 = results4.ElementAt(0);
+    var results5 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 5");
+    var Voted5= results5.ElementAt(0);
+    var results6 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 6");
+    var Voted6 = results6.ElementAt(0);
+    var results7 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 7");
+    var Voted7 = results7.ElementAt(0);
+    var results8 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 8");
+    var Voted8 = results8.ElementAt(0);
+    var results9 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 9");
+    var Voted9 = results9.ElementAt(0);
+    var results10 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 10");
+    var Voted10 = results10.ElementAt(0);
+    var results11 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 11");
+    var Voted11 = results11.ElementAt(0);
+    var results12 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 12");
+    var Voted12 = results12.ElementAt(0);
+    var results13 = myDB.Query("SELECT COUNT(*) AS num FROM votes WHERE vote = 13");
+    var Voted13 = results13.ElementAt(0);
+
+    //Gender Chart Variables
+    var Mresults1 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 1 AND personal.Gender = 1");
+    var MVoted1 = Mresults1.ElementAt(0);
+    var Mresults2 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 2 AND personal.Gender = 1");
+    var MVoted2 = Mresults2.ElementAt(0);
+    var Mresults3 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 3 AND personal.Gender = 1");
+    var MVoted3 = Mresults3.ElementAt(0);
+    var Mresults4 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 4 AND personal.Gender = 1");
+    var MVoted4 = Mresults4.ElementAt(0);
+    var Mresults5 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 5 AND personal.Gender = 1");
+    var MVoted5 = Mresults5.ElementAt(0);
+    var Mresults6 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 6 AND personal.Gender = 1");
+    var MVoted6 = Mresults6.ElementAt(0);
+    var Mresults7 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 7 AND personal.Gender = 1");
+    var MVoted7 = Mresults7.ElementAt(0);
+    var Mresults8 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 8 AND personal.Gender = 1");
+    var MVoted8 = Mresults8.ElementAt(0);
+    var Mresults9 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 9 AND personal.Gender = 1");
+    var MVoted9 = Mresults9.ElementAt(0);
+    var Mresults10 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 10 AND personal.Gender = 1");
+    var MVoted10 = Mresults10.ElementAt(0);
+    var Mresults11 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 11 AND personal.Gender = 1");
+    var MVoted11 = Mresults11.ElementAt(0);
+    var Mresults12 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 12 AND personal.Gender = 1");
+    var MVoted12 = Mresults12.ElementAt(0);
+    var Mresults13 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 13 AND personal.Gender = 1");
+    var MVoted13 = Mresults13.ElementAt(0);
+
+    var Fresults1 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 1 AND personal.Gender = 0");
+    var FVoted1 = Fresults1.ElementAt(0);
+    var Fresults2 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 2 AND personal.Gender = 0");
+    var FVoted2 = Fresults2.ElementAt(0);
+    var Fresults3 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 3 AND personal.Gender = 0");
+    var FVoted3 = Fresults3.ElementAt(0);
+    var Fresults4 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 4 AND personal.Gender = 0");
+    var FVoted4 = Fresults4.ElementAt(0);
+    var Fresults5 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 5 AND personal.Gender = 0");
+    var FVoted5 = Fresults5.ElementAt(0);
+    var Fresults6 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 6 AND personal.Gender = 0");
+    var FVoted6 = Fresults6.ElementAt(0);
+    var Fresults7 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 7 AND personal.Gender = 0");
+    var FVoted7 = Fresults7.ElementAt(0);
+    var Fresults8 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 8 AND personal.Gender = 0");
+    var FVoted8 = Fresults8.ElementAt(0);
+    var Fresults9 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 9 AND personal.Gender = 0");
+    var FVoted9 = Fresults9.ElementAt(0);
+    var Fresults10 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 10 AND personal.Gender = 0");
+    var FVoted10 = Fresults10.ElementAt(0);
+    var Fresults11 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 11 AND personal.Gender = 0");
+    var FVoted11 = Fresults11.ElementAt(0);
+    var Fresults12 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 12 AND personal.Gender = 0");
+    var FVoted12 = Fresults12.ElementAt(0);
+    var Fresults13 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 13 AND personal.Gender = 0");
+    var FVoted13 = Fresults13.ElementAt(0);
+
+    // Age Chart Variables
+    var r11 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 1 AND personal.Age > 17 AND personal.Age < 25");
+    var v11 = r11.ElementAt(0);
+    var r12 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 2 AND personal.Age > 17 AND personal.Age < 25");
+    var v12 = r12.ElementAt(0);
+    var r13 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 3 AND personal.Age > 17 AND personal.Age < 25");
+    var v13 = r13.ElementAt(0);
+    var r14 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 4 AND personal.Age > 17 AND personal.Age < 25");
+    var v14 = r14.ElementAt(0);
+    var r15 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 5 AND personal.Age > 17 AND personal.Age < 25");
+    var v15= r15.ElementAt(0);
+    var r16 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 6 AND personal.Age > 17 AND personal.Age < 25");
+    var v16 = r16.ElementAt(0);
+    var r17 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 7 AND personal.Age > 17 AND personal.Age < 25");
+    var v17 = r17.ElementAt(0);
+    var r18 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 8 AND personal.Age > 17 AND personal.Age < 25");
+    var v18 = r18.ElementAt(0);
+    var r19 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 9 AND personal.Age > 17 AND personal.Age < 25");
+    var v19 = r19.ElementAt(0);
+    var r110 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 10 AND personal.Age > 17 AND personal.Age < 25");
+    var v110 = r110.ElementAt(0);
+    var r111 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 11 AND personal.Age > 17 AND personal.Age < 25");
+    var v111 = r111.ElementAt(0);
+    var r112 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 12 AND personal.Age > 17 AND personal.Age < 25");
+    var v112 = r112.ElementAt(0);
+    var r113 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 13 AND personal.Age > 17 AND personal.Age < 25");
+    var v113 = r113.ElementAt(0);
+
+    var r21 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 1 AND personal.Age > 24 AND personal.Age < 41");
+    var v21 = r21.ElementAt(0);
+    var r22 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 2 AND personal.Age > 24 AND personal.Age < 41");
+    var v22 = r22.ElementAt(0);
+    var r23 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 3 AND personal.Age > 24 AND personal.Age < 41");
+    var v23 = r23.ElementAt(0);
+    var r24 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 4 AND personal.Age > 24 AND personal.Age < 41");
+    var v24 = r24.ElementAt(0);
+    var r25 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 5 AND personal.Age > 24 AND personal.Age < 41");
+    var v25= r25.ElementAt(0);
+    var r26 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 6 AND personal.Age > 24 AND personal.Age < 41");
+    var v26 = r26.ElementAt(0);
+    var r27 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 7 AND personal.Age > 24 AND personal.Age < 41");
+    var v27 = r27.ElementAt(0);
+    var r28 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 8 AND personal.Age > 24 AND personal.Age < 41");
+    var v28 = r28.ElementAt(0);
+    var r29 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 9 AND personal.Age > 24 AND personal.Age < 41");
+    var v29 = r29.ElementAt(0);
+    var r210 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 10 AND personal.Age > 24 AND personal.Age < 41");
+    var v210 = r210.ElementAt(0);
+    var r211 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 11 AND personal.Age > 24 AND personal.Age < 41");
+    var v211 = r211.ElementAt(0);
+    var r212 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 12 AND personal.Age > 24 AND personal.Age < 41");
+    var v212 = r212.ElementAt(0);
+    var r213 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 13 AND personal.Age > 24 AND personal.Age < 41");
+    var v213 = r213.ElementAt(0);
+   
+    var r31 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 1 AND personal.Age > 40 AND personal.Age < 66");
+    var v31 = r31.ElementAt(0);
+    var r32 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 2 AND personal.Age > 40 AND personal.Age < 66");
+    var v32 = r32.ElementAt(0);
+    var r33 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 3 AND personal.Age > 40 AND personal.Age < 66");
+    var v33 = r33.ElementAt(0);
+    var r34 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 4 AND personal.Age > 40 AND personal.Age < 66");
+    var v34 = r34.ElementAt(0);
+    var r35 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 5 AND personal.Age > 40 AND personal.Age < 66");
+    var v35= r35.ElementAt(0);
+    var r36 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 6 AND personal.Age > 40 AND personal.Age < 66");
+    var v36 = r36.ElementAt(0);
+    var r37 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 7 AND personal.Age > 40 AND personal.Age < 66");
+    var v37 = r37.ElementAt(0);
+    var r38 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 8 AND personal.Age > 40 AND personal.Age < 66");
+    var v38 = r38.ElementAt(0);
+    var r39 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 9 AND personal.Age > 40 AND personal.Age < 66");
+    var v39 = r39.ElementAt(0);
+    var r310 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 10 AND personal.Age > 40 AND personal.Age < 66");
+    var v310 = r310.ElementAt(0);
+    var r311 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 11 AND personal.Age > 40 AND personal.Age < 66");
+    var v311 = r311.ElementAt(0);
+    var r312 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 12 AND personal.Age > 40 AND personal.Age < 66");
+    var v312 = r312.ElementAt(0);
+    var r313 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 13 AND personal.Age > 40 AND personal.Age < 66");
+    var v313 = r313.ElementAt(0);
+
+    var r41 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 1 AND personal.Age > 65");
+    var v41 = r41.ElementAt(0);
+    var r42 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 2 AND personal.Age > 65");
+    var v42 = r42.ElementAt(0);
+    var r43 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 3 AND personal.Age > 65");
+    var v43 = r43.ElementAt(0);
+    var r44 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 4 AND personal.Age > 65");
+    var v44 = r44.ElementAt(0);
+    var r45 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 5 AND personal.Age > 65");
+    var v45= r45.ElementAt(0);
+    var r46 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 6 AND personal.Age > 65");
+    var v46 = r46.ElementAt(0);
+    var r47 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 7 AND personal.Age > 65");
+    var v47 = r47.ElementAt(0);
+    var r48 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 8 AND personal.Age > 65");
+    var v48 = r48.ElementAt(0);
+    var r49 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 9 AND personal.Age > 65");
+    var v49 = r49.ElementAt(0);
+    var r410 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 10 AND personal.Age > 65");
+    var v410 = r410.ElementAt(0);
+    var r411 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 11 AND personal.Age > 65");
+    var v411 = r411.ElementAt(0);
+    var r412 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 12 AND personal.Age > 65");
+    var v412 = r412.ElementAt(0);
+    var r413 = myDB.Query("SELECT COUNT(*) AS num FROM votes JOIN personal ON votes.VID = personal.PID WHERE votes.vote = 13 AND personal.Age > 65");
+    var v413 = r413.ElementAt(0);
+
+    
+}
+<body style="background-color: #c3c3c3">
+<hgroup class="content-3" style="background-color: #c3c3c3">
+    <h2>The Current Votes</h2>
+</hgroup>
+
+<div class="content-3" style="background-color: #c3c3c3">
+<table id="datatable" style="margin-left: 40%; margin-right: auto; background-color: white">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Number of Votes</th>
+            </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>
+            @Name1.Pname
+            </text></th>
+            <td>
+            @Voted1.num
+            </td>
+        </tr>
+        <tr>
+            <th>@Name2.Pname</th>
+            <td>
+            @Voted2.num
+            </td>
+        </tr>
+        <tr>
+            <th>@Name3.Pname</th>
+            <td>
+            @Voted3.num
+            </td>
+        </tr>
+        <tr>
+            <th>@Name4.Pname</th>
+            <td>
+            @Voted4.num
+            </td>
+        </tr>
+        <tr>
+            <th>@Name5.Pname</th>
+            <td>
+            @Voted5.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name6.Pname</th>
+            <td>
+            @Voted6.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name7.Pname</th>
+            <td>
+            @Voted7.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name8.Pname</th>
+            <td>
+            @Voted8.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name9.Pname</th>
+            <td>
+            @Voted9.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name10.Pname</th>
+            <td>
+            @Voted10.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name11.Pname</th>
+            <td>
+            @Voted11.num
+           </td>
+        </tr>
+    <tr>
+            <th>@Name12.Pname</th>
+            <td>
+            @Voted12.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name13.Pname</th>
+            <td>
+            @Voted13.num
+            </td>
+        </tr>
+    <tr>
+            <th>Abstained From Voting</th>
+            <td> 
+            @notVoted.Num_All
+            </td>
+        </tr>
+    </tbody>
+</table>
+    <br>
+    <br>
+        <table id="datatable2" style="margin-left: 40%; margin-right: auto; background-color: white">
+    <thead>
+        <tr>
+            <th></th>
+            <th>| Male Votes | </th>
+            <th>| Female Votes |</th>
+            </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>
+            @Name1.Pname
+            </text></th>
+            <td>
+            @MVoted1.num
+            </td>
+            <td>
+            @FVoted1.num
+            </td>
+        </tr>
+        <tr>
+            <th>@Name2.Pname</th>
+            <td>
+            @MVoted2.num
+            </td>
+            <td>
+            @FVoted2.num
+            </td>
+        </tr>
+        <tr>
+            <th>@Name3.Pname</th>
+            <td>
+            @MVoted3.num
+            </td>
+            <td>
+            @FVoted3.num
+            </td>
+        </tr>
+        <tr>
+            <th>@Name4.Pname</th>
+            <td>
+            @MVoted4.num
+            </td>
+            <td>
+            @FVoted4.num
+            </td>
+        </tr>
+        <tr>
+            <th>@Name5.Pname</th>
+            <td>
+            @MVoted5.num
+            </td>
+            <td>
+            @FVoted5.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name6.Pname</th>
+            <td>
+            @MVoted6.num
+            </td>
+        <td>
+            @FVoted6.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name7.Pname</th>
+            <td>
+            @MVoted7.num
+            </td>
+        <td>
+            @FVoted7.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name8.Pname</th>
+            <td>
+            @MVoted8.num
+            </td>
+        <td>
+            @FVoted8.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name9.Pname</th>
+            <td>
+            @MVoted9.num
+            </td>
+        <td>
+            @FVoted9.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name10.Pname</th>
+            <td>
+            @MVoted10.num
+            </td>
+        <td>
+            @FVoted10.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name11.Pname</th>
+            <td>
+            @MVoted11.num
+           </td>
+        <td>
+            @FVoted11.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name12.Pname</th>
+            <td>
+            @MVoted12.num
+            </td>
+            <td>
+            @FVoted12.num
+            </td>
+        </tr>
+    <tr>
+            <th>@Name13.Pname</th>
+            <td>
+            @MVoted13.num
+            </td>
+            <td>
+            @FVoted13.num
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+    <br>
+    <br>
+        <table id="datatable3" style="margin-left: 40%; margin-right: auto; background-color: white">
+    <thead>
+        <tr>
+            <th></th>
+            <th>| 18-25 |</th>
+            <th>| 26-40 |</th>
+            <th>| 41-65 |</th>
+            <th>| 65+ |</th>
+            </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>
+            @Name1.Pname
+            </th>
+           <td>@v11.num</td>
+            <td>@v21.num</td>
+            <td>@v31.num</td>
+            <td>@v41.num</td>
+        </tr>
+        <tr>
+            <th>@Name2.Pname</th>
+            <td>@v12.num</td>
+            <td>@v22.num</td>
+            <td>@v32.num</td>
+            <td>@v42.num</td>
+        </tr>
+        <tr>
+            <th>@Name3.Pname</th>
+            <td>@v13.num</td>
+            <td>@v23.num</td>
+            <td>@v33.num</td>
+            <td>@v43.num</td>
+        </tr>
+        <tr>
+            <th>@Name4.Pname</th>
+            <td>@v14.num</td>
+            <td>@v24.num</td>
+            <td>@v34.num</td>
+            <td>@v44.num</td>
+        </tr>
+        <tr>
+            <th>@Name5.Pname</th>
+            <td>@v15.num</td>
+            <td>@v25.num</td>
+            <td>@v35.num</td>
+            <td>@v45.num</td>
+        </tr>
+    <tr>
+            <th>@Name6.Pname</th>
+           <td>@v16.num</td>
+            <td>@v26.num</td>
+            <td>@v36.num</td>
+            <td>@v46.num</td>
+        </tr>
+    <tr>
+            <th>@Name7.Pname</th>
+            <td>@v17.num</td>
+            <td>@v27.num</td>
+            <td>@v37.num</td>
+            <td>@v47.num</td>
+        </tr>
+    <tr>
+            <th>@Name8.Pname</th>
+            <td>@v18.num</td>
+            <td>@v28.num</td>
+            <td>@v38.num</td>
+            <td>@v48.num</td>
+        </tr>
+    <tr>
+            <th>@Name9.Pname</th>
+            <td>@v19.num</td>
+            <td>@v29.num</td>
+            <td>@v39.num</td>
+            <td>@v49.num</td>
+        </tr>
+    <tr>
+            <th>@Name10.Pname</th>
+            <td>@v110.num</td>
+            <td>@v210.num</td>
+            <td>@v310.num</td>
+            <td>@v410.num</td>
+        </tr>
+    <tr>
+            <th>@Name11.Pname</th>
+            <td>@v111.num</td>
+            <td>@v211.num</td>
+            <td>@v311.num</td>
+            <td>@v411.num</td>
+        </tr>
+    <tr>
+            <th>@Name12.Pname</th>
+            <td>@v112.num</td>
+            <td>@v212.num</td>
+            <td>@v312.num</td>
+            <td>@v412.num</td>
+        </tr>
+    <tr>
+            <th>@Name13.Pname</th>
+           <td>@v113.num</td>
+            <td>@v213.num</td>
+            <td>@v313.num</td>
+            <td>@v413.num</td>
+        </tr>
+    </tbody>
+</table>
+    <br>
+    <br>
+        
+    </div>
+<br>
+<br>
+
+<div id="container" style="width: 80%; height: 400px; margin: 0 auto"></div>
+<br>
+<br>
+<div id="container2" style="width: 80%; height: 400px; margin: 0 auto"></div>
+<br>
+<br>
+<div id="container3" style="width: 80%; height: 400px; margin: 0 auto"></div>
+    </body>
+<!-- Footer -->
+    <footer class="page-footer">
+    
+    	<!-- Contact Us -->
+        <div class="contact">
+        	<div class="container">
+				<h2 class="section-heading">Contact Us</h2>
+				<p><span class="glyphicon glyphicon-earphone"></span><br> +1(23) 456 7890</p>
+				<p><span class="glyphicon glyphicon-envelope"></span><br> info@example.com</p>
+        	</div>
+        </div>
+        	
+        <!-- Copyright etc -->
+        <div class="small-print">
+        	<div class="container">
+        		<p>Copyright &copy; Example.com </p>
+        	</div>
+        </div>
+        
+    </footer>
+                     
